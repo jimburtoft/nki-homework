@@ -104,6 +104,9 @@ def main():
     ap.add_argument("--_child", help=argparse.SUPPRESS)
     a = ap.parse_args()
 
+    if os.environ.get("NKIHW_TARGET", "trn2") != "trn2":
+        print("grade.py grades the trn2 target only; unset NKIHW_TARGET.")
+        return 2
     cfg = PROJECTS[a.project]
     kfile = os.path.abspath(a.file or os.path.join(ROOT, cfg["dir"], "kernel.py"))
 

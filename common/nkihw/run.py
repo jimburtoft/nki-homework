@@ -131,7 +131,7 @@ def _log_errors(art: str) -> str:
 
 
 def compile_kernel(kernel, *args, keep_artifacts=None, **kwargs) -> CompileReport:
-    """Compile ``kernel`` for trn2 with neuronx-cc (no device needed).
+    """Compile ``kernel`` for the target (trn2 unless NKIHW_TARGET=trn3) with neuronx-cc (no device needed).
 
     This catches errors the simulator does not (on-chip memory capacity,
     hardware access-pattern rules, a missing ``return``) and returns the

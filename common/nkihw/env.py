@@ -10,7 +10,9 @@ Why this matters:
 import os
 import sys
 
-TARGET = "trn2"
+TARGET = os.environ.get("NKIHW_TARGET", "trn2")  # Lab 7 (ungraded) sets trn3; everything graded is trn2
+if TARGET not in ("trn2", "trn3"):
+    raise RuntimeError(f"NKIHW_TARGET must be trn2 or trn3, got {TARGET!r}")
 
 
 def has_device() -> bool:
@@ -28,8 +30,8 @@ def configure() -> None:
     os.environ.setdefault("NKI_LNC1_SHARED_HBM", "0")
     os.environ.setdefault("NKI_DISABLE_COMPILE_CACHE", "1")
     if not has_device():
-        # Lets the offline compiler build a trn2 NEFF on a CPU-only machine.
-        os.environ.setdefault("NEURON_RT_FAKE_INSTANCE_TYPE", "trn2.3xlarge")
+        # Lets the offline compiler build a NEFF on a CPU-only machine.
+        os.environ.setdefault("NEURON_RT_FAKE_INSTANCE_TYPE", "trn2.3xlarge" if TARGET == "trn2" else "trn3.48xlarge")
     # The NKI driver runs `neuronx-cc` as a subprocess; make sure the copy that is
     # installed next to this Python interpreter is found even if the venv is not
     # activated.

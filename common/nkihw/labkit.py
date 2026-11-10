@@ -15,6 +15,7 @@ from typing import Callable
 import numpy as np
 
 from .compare import check
+from .env import TARGET
 from .run import compile_kernel, simulate
 
 
@@ -84,7 +85,7 @@ def run_lab(title, exercises, default_file, argv=None):
             print(f"   sim     {r}  [{time.time() - t0:.1f}s]")
         if ok and ex.compile and not args.no_compile:
             rep = compile_kernel(k, *inp)
-            print("   trn2    " + rep.summary().replace("\n", "\n           "))
+            print(f"   {TARGET:<8}" + rep.summary().replace("\n", "\n           "))
             ok = rep.ok
             if ok and ex.max_est_us is not None:
                 met = rep.est_us is not None and rep.est_us <= ex.max_est_us

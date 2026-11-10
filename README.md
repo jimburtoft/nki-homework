@@ -27,7 +27,7 @@ measure real latency.
 | [Lab 4](labs/L4_performance/lab.py) | performance: DMA size, overlap, fusion, data reuse (compiler estimate) | ~40 min | all projects |
 | [Lab 5](labs/L5_precision/lab.py) | precision: fp32 vs bf16 accumulation, fp8 `double_row`, row tiling, stochastic rounding (software; hardware SR as a trn2 bonus) | ~60 min | optional for P1/P2, P3 |
 | [Lab 6](labs/L6_structure/lab.py) | masks, block skipping, the hardware scan instruction, prefix sums as matmuls, M:N structured sparsity (written) | ~60 min | P2, P3 |
-| Lab 7 | optional trn3 exploration (MX formats) in the simulator, ungraded | *coming* | - |
+| [Lab 7](labs/L7_trn3/lab.py) | optional, ungraded: trn3 (NeuronCore-v4) in the simulator. bf16 PSUM, 4096-wide matmuls, MXFP8 `quantize_mx` + `nc_matmul_mx` | ~40 min | - |
 
 | Final project | Difficulty | Prerequisites |
 |---|---|---|
