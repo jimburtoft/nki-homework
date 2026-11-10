@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "nkihw"
+version = "0.1.0"
+description = "Harness for the NKI (Neuron Kernel Interface) homework: simulator runner, offline-compile cost estimate, autograder"
+license = "Apache-2.0"
+requires-python = ">=3.12,<3.13"
+dependencies = ["numpy", "ml_dtypes"]
+
+[tool.setuptools.packages.find]
+where = ["common"]
+include = ["nkihw*"]
