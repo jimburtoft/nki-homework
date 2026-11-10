@@ -22,4 +22,16 @@ PROJECTS = {
         # Values are set from the instructor solutions (neuronx-cc 2.28).
         "perf": {"full": 340.0, "zero": 4500.0},
     },
+    "P2": {
+        "dir": "projects/P2_window_attention",
+        "kernel": "window_attention",
+        "title": "Sliding-window causal attention (medium)",
+        "cases": [
+            {"name": "tiny", "shape": {"T": 128, "d": 64, "W": 128}, "seed": 1},
+            {"name": "small", "shape": {"T": 512, "d": 64, "W": 100}, "seed": 2},
+            {"name": "mid", "shape": {"T": 2048, "d": 128, "W": 256}, "seed": 3},
+            {"name": "long", "shape": {"T": 4096, "d": 128, "W": 512}, "seed": 4, "perf": True},
+        ],
+        "perf": {"full": 110.0, "zero": 1500.0},
+    },
 }

@@ -25,14 +25,14 @@ measure real latency.
 | [Lab 2](labs/L2_engines/lab.py) | Vector/Scalar engines, reductions, per-partition scalars, RMSNorm, softmax | ~40 min | all projects |
 | [Lab 3](labs/L3_matmul/lab.py) | Tensor Engine: 128x128 matmul, fp32 PSUM accumulation, tiled GEMM, transposes, fused epilogues | ~60 min | all projects |
 | [Lab 4](labs/L4_performance/lab.py) | performance: DMA size, overlap, fusion, data reuse (compiler estimate) | ~40 min | all projects |
-| Lab 5 | precision: fp32 vs bf16 accumulation, fp8 `double_row`, row tiling, stochastic rounding (trn2 bonus) | *coming* | P2, P3 |
-| Lab 6 | masks, block sparsity, the hardware scan instruction | *coming* | P2, P3 |
+| [Lab 5](labs/L5_precision/lab.py) | precision: fp32 vs bf16 accumulation, fp8 `double_row`, row tiling, stochastic rounding (software; hardware SR as a trn2 bonus) | ~60 min | optional for P1/P2, P3 |
+| [Lab 6](labs/L6_structure/lab.py) | masks, block skipping, the hardware scan instruction, prefix sums as matmuls, M:N structured sparsity (written) | ~60 min | P2, P3 |
 | Lab 7 | optional trn3 exploration (MX formats) in the simulator, ungraded | *coming* | - |
 
 | Final project | Difficulty | Prerequisites |
 |---|---|---|
 | [P1: fused MLP block](projects/P1_mlp/SPEC.md) | easy (2-4 h) | Labs 0-4 |
-| P2: sliding-window causal attention | medium | Labs 0-4, 6 (5 optional) |
+| [P2: sliding-window causal attention](projects/P2_window_attention/SPEC.md) | medium (4-6 h) | Labs 0-4, 6 (5 optional) |
 | P3: Mamba-2 SSD chunked scan | hard | Labs 0-6 |
 
 Each project can be assigned alone. The labs are not graded; each lab's
