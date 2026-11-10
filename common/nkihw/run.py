@@ -85,6 +85,10 @@ _HINTS = [
 
 
 def _hint(text: str):
+    if "libarchive" in text:
+        return ("The Neuron compiler needs the system library libarchive (libarchive.so.13). Install it: "
+                "Ubuntu 24.04 `apt-get install libarchive13t64`, Ubuntu 22.04/Debian `apt-get install libarchive13`, "
+                "Amazon Linux/Fedora/RHEL `dnf install libarchive`. See docs/SETUP.md.")
     for pat, h in _HINTS:
         if re.search(pat, text, flags=re.I | re.S):
             return h
@@ -124,6 +128,10 @@ def _log_errors(art: str) -> str:
             if m:
                 msg = f"[{m.group(1)}] {m.group(2).strip()}"
                 msg = re.sub(r"#Internal DebugInfo:.*", "", msg).strip()
+                if msg not in out:
+                    out.append(msg)
+            elif "cannot open shared object file" in line:
+                msg = "missing system library: " + line.split("error while loading shared libraries:", 1)[-1].strip()
                 if msg not in out:
                     out.append(msg)
             elif "Assertion failure:" in line:

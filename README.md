@@ -41,11 +41,14 @@ graded, with `grader/grade.py`.
 
 ## Setup (about 5 minutes)
 
-Requirements: Linux x86-64 and **Python 3.12**. The NKI wheel is built for
-cp312 / linux_x86_64 only.
+You need **x86-64 Linux, Python 3.12, and the system library libarchive**. No
+Trainium hardware is needed. Per-distribution commands (Ubuntu 22.04/24.04,
+Debian 12, Amazon Linux 2023), a Docker image, and troubleshooting are in
+[docs/SETUP.md](docs/SETUP.md). The short version, for Ubuntu 24.04:
 
 ```bash
-git clone <this repo> nki-homework && cd nki-homework
+sudo apt-get install -y python3.12 python3.12-venv libarchive13t64
+git clone https://github.com/jimburtoft/nki-homework.git && cd nki-homework
 python3.12 -m venv .venv && source .venv/bin/activate
 pip install --index-url https://pip.repos.neuron.amazonaws.com \
             --extra-index-url https://pypi.org/simple \
@@ -53,11 +56,11 @@ pip install --index-url https://pip.repos.neuron.amazonaws.com \
 python common/selftest.py          # should end with: SELFTEST PASS
 ```
 
-The package named `nki` on plain PyPI is a placeholder. You must use the Neuron
-index as shown above.
+With Docker, on any OS: `docker build -t nki-homework .` and then
+`docker run --rm -it -v "$PWD":/hw -w /hw nki-homework python common/selftest.py`.
 
 On a trn2 instance with the AWS Neuron Deep Learning AMI (SDK 2.33), use the
-preinstalled venv and add the device runtime bindings. See
+preinstalled venv and add the device runtime bindings; see
 [docs/HARDWARE.md](docs/HARDWARE.md).
 
 ## Workflow
@@ -95,7 +98,9 @@ the kernel.
 | Stochastic rounding (`NEURON_RT_STOCHASTIC_ROUNDING_EN=1`) | ignored (always round-to-nearest-even) | - | yes |
 
 The compiler estimate is good for comparing two versions of your kernel. It is
-not a measured runtime.
+not a measured runtime. **[docs/COMPILER.md](docs/COMPILER.md)** explains how to use
+the compiler as a test on your CPU: what it catches, how to read its output, and
+how to call `nkihw.compile_kernel` from your own scripts.
 
 ## For instructors
 

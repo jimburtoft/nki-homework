@@ -73,6 +73,10 @@ def main():
     expect(not r.ok and "NaN" in r.msg, f"stub fails with NaN message: {r}")
     rep = nkihw.compile_kernel(good, x)
     expect(rep.ok and rep.est_ns and rep.est_ns > 0, f"compile good: {rep.summary()}")
+    if not rep.ok:
+        print("SELFTEST: the simulator works but the Neuron compiler does not; see the hint above and docs/SETUP.md")
+        print("SELFTEST FAIL")
+        return 1
     for k in (too_big, bad_partition, no_return):
         rep = nkihw.compile_kernel(k, x)
         expect(not rep.ok, f"compile {k.func.__name__} rejected: {rep.summary()}")

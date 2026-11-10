@@ -13,7 +13,7 @@ trn2.3xlarge is enough.
 ```bash
 source /opt/aws_neuronx_venv_torch_neuronx_2_14_0/bin/activate
 pip install --index-url https://pip.repos.neuron.amazonaws.com nrtpy   # NKI's device runtime bindings
-git clone <this repo> nki-homework && cd nki-homework
+git clone https://github.com/jimburtoft/nki-homework.git && cd nki-homework
 python common/selftest.py
 ```
 
