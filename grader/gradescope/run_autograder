@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+# Gradescope entry point. Configure PROJECT (P1/P2/P3) and, optionally, HIDDEN
+# (a hidden-case JSON copied into the autograder zip; never put it in the public repo).
+set -uo pipefail
+PROJECT=${PROJECT:-P1}
+HIDDEN=${HIDDEN:-/autograder/source/hidden/${PROJECT}.json}
+SRC=/autograder/source
+PY=/opt/nkivenv/bin/python
+SUB=$(find /autograder/submission -name kernel.py | head -1)
+mkdir -p /autograder/results
+if [ -z "$SUB" ]; then
+  echo '{"score": 0, "output": "No kernel.py found in the submission."}' > /autograder/results/results.json
+  exit 0
+fi
+EXTRA=()
+[ -f "$HIDDEN" ] && EXTRA=(--cases "$HIDDEN")
+$PY "$SRC/grader/grade.py" "$PROJECT" --file "$SUB" "${EXTRA[@]}" --json /tmp/grade.json --timeout 900
+PUBLIC=$($PY -c "import sys; sys.path.insert(0, '$SRC/grader'); import projects; print(','.join(c['name'] for c in projects.PROJECTS['$PROJECT']['cases']))")
+$PY "$SRC/grader/gradescope/to_gradescope.py" /tmp/grade.json /autograder/results/results.json --public-cases "$PUBLIC"

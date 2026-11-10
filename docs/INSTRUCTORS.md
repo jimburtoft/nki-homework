@@ -50,3 +50,11 @@ Hidden case files have this format:
 - Thresholds are calibrated for neuronx-cc 2.28 (Neuron SDK 2.33). If you pin a
   different compiler version, re-run the instructor solutions and re-set the
   thresholds.
+
+## Gradescope
+
+`grader/gradescope/` contains an experimental autograder wrapper. It has a
+setup script, `run_autograder`, and a converter from `grade.py --json` output to
+Gradescope `results.json`, which masks hidden-case details. See
+[grader/gradescope/README.md](../grader/gradescope/README.md). The converter has
+been tested locally; the wrapper has not yet been tested on Gradescope itself.
