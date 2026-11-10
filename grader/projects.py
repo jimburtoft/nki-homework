@@ -34,4 +34,16 @@ PROJECTS = {
         ],
         "perf": {"full": 110.0, "zero": 1500.0},
     },
+    "P3": {
+        "dir": "projects/P3_mamba2_ssd",
+        "kernel": "ssd_kernel",
+        "title": "Mamba-2 SSD chunked scan (hard)",
+        "cases": [
+            {"name": "one", "shape": {"L": 128, "P": 64, "N": 64}, "seed": 1},
+            {"name": "small", "shape": {"L": 512, "P": 64, "N": 128}, "seed": 2},
+            {"name": "decay", "shape": {"L": 1024, "P": 128, "N": 64, "decay": 5.0}, "seed": 3},
+            {"name": "long", "shape": {"L": 4096, "P": 128, "N": 128}, "seed": 4, "perf": True},
+        ],
+        "perf": {"full": 80.0, "zero": 250.0},
+    },
 }

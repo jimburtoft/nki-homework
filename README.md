@@ -33,7 +33,7 @@ measure real latency.
 |---|---|---|
 | [P1: fused MLP block](projects/P1_mlp/SPEC.md) | easy (2-4 h) | Labs 0-4 |
 | [P2: sliding-window causal attention](projects/P2_window_attention/SPEC.md) | medium (4-6 h) | Labs 0-4, 6 (5 optional) |
-| P3: Mamba-2 SSD chunked scan | hard | Labs 0-6 |
+| [P3: Mamba-2 SSD chunked scan](projects/P3_mamba2_ssd/SPEC.md) | hard (6-10 h) | Labs 0-6 |
 
 Each project can be assigned alone. The labs are not graded; each lab's
 `check.py` tells you whether your answers are right. Only the final projects are

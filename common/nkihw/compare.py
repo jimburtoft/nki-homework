@@ -40,9 +40,8 @@ def check(out, ref, *, rel_l2=None, atol=None, rtol=0.0, exact=False, name="outp
     nan = ~np.isfinite(o)
     if nan.any():
         rows = np.unique(np.nonzero(nan)[0])
-        frac = nan.sum() / o.size
-        why = ("Unwritten output reads as NaN in the simulator." if frac > 0.99 else
-               "Either part of the output was never written (reads as NaN), or the math overflowed (inf, inf-inf, 0*inf).")
+        why = ("Either the output (or part of it) was never written -- unwritten memory reads as NaN "
+               "in the simulator -- or the math overflowed (inf, inf - inf, 0 * inf).")
         return CheckResult(
             False,
             f"{name}: {int(nan.sum())} of {o.size} values are NaN/inf (rows {rows[:6].tolist()}"
