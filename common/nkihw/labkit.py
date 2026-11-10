@@ -28,6 +28,7 @@ class Exercise:
     compile: bool = True  # also offline-compile for trn2 (legality + cost estimate)
     note: str = ""
     max_est_us: float | None = None  # performance goal: compiler estimate must be <= this
+    custom: Callable | None = None  # optional fn(out, ref) -> CheckResult, replaces the tolerance check
 
 
 def load_module(path):
@@ -74,7 +75,10 @@ def run_lab(title, exercises, default_file, argv=None):
         if len(outs) != len(refs):
             print(f"   FAIL  kernel returned {len(outs)} outputs, expected {len(refs)}")
             continue
-        results = [check(o, r, name=f"out{i}" if len(refs) > 1 else "output", **ex.tol) for i, (o, r) in enumerate(zip(outs, refs))]
+        if ex.custom is not None:
+            results = [ex.custom(o, r) for o, r in zip(outs, refs)]
+        else:
+            results = [check(o, r, name=f"out{i}" if len(refs) > 1 else "output", **ex.tol) for i, (o, r) in enumerate(zip(outs, refs))]
         ok = all(results)
         for r in results:
             print(f"   sim     {r}  [{time.time() - t0:.1f}s]")
