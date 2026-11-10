@@ -19,9 +19,10 @@ Background
   accumulates in fp32, even for bf16/fp8 inputs.
 * Calling nc_matmul again into the SAME psum tile ACCUMULATES. That is how you
   sum over K > 128: loop over K tiles into one PSUM tile.
-* Engines cannot DMA out of PSUM. Read it with an engine instruction
-  (tensor_copy, activation, tensor_scalar, ...) into SBUF, which can also
-  apply a function and change the dtype ("evicting" PSUM). PSUM is small:
+* PSUM cannot be DMA'd. Read it with an engine instruction
+  (tensor_copy, activation, tensor_scalar, ...) into SBUF; that instruction
+  can also apply a function and change the dtype ("evicting" PSUM).
+  nisa.activation and nisa.tensor_scalar read PSUM directly. PSUM is small:
   8 banks of [128 x 2 KiB], i.e. at most 8 live [128, 512] fp32 accumulators.
 
 So C = A @ B with A:[M,K], B:[K,N] needs A^T as the stationary operand:
@@ -29,8 +30,12 @@ So C = A @ B with A:[M,K], B:[K,N] needs A^T as the stationary operand:
 
 Data layout matters. If A arrives as [M, K] (rows = M), you must transpose
 128x128 blocks to get [K, M]. Two ways to do it on the hardware:
-    nisa.dma_transpose(dst=sbuf[K,M], src=hbm[M,K])   the DMA engine transposes in flight (2-byte dtypes)
+    nisa.dma_transpose(dst=sbuf[K,M], src=hbm[M,K])   the DMA engine transposes in flight
+        (2-byte dtypes such as bf16; a 128x128 block from HBM works on trn2 even
+        though the API docstring mentions a 16-partition limit for some 2-D cases)
     nisa.nc_transpose(dst=psum[K,M], data=sbuf[M,K])  the Tensor Engine transposes, result in PSUM
+        (here the PSUM tile must have the SAME dtype as the input, e.g. bf16,
+        unlike nc_matmul whose PSUM output is fp32)
 
 Run:  python labs/L3_matmul/check.py
 """

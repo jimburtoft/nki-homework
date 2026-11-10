@@ -45,6 +45,7 @@ def run_lab(title, exercises, default_file, argv=None):
     ap.add_argument("--file", default=default_file, help="lab file to check (default: lab.py next to this script)")
     ap.add_argument("-e", "--exercise", action="append", help="only run these exercises (e.g. -e 1a -e 1b)")
     ap.add_argument("--no-compile", action="store_true", help="skip the offline compile step (faster)")
+    ap.add_argument("--keep-artifacts", metavar="DIR", help="keep compiler outputs (logs, NEFF, instruction stats) under DIR/<exercise>")
     args = ap.parse_args(argv)
 
     mod = load_module(args.file)
@@ -84,7 +85,10 @@ def run_lab(title, exercises, default_file, argv=None):
         for r in results:
             print(f"   sim     {r}  [{time.time() - t0:.1f}s]")
         if ok and ex.compile and not args.no_compile:
-            rep = compile_kernel(k, *inp)
+            keep = os.path.join(args.keep_artifacts, f"{ex.name}_{ex.kernel}") if args.keep_artifacts else None
+            rep = compile_kernel(k, *inp, keep_artifacts=keep)
+            if keep:
+                print(f"   artifacts in {keep}")
             print(f"   {TARGET:<8}" + rep.summary().replace("\n", "\n           "))
             ok = rep.ok
             if ok and ex.max_est_us is not None:

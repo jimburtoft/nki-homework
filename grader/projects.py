@@ -17,10 +17,14 @@ PROJECTS = {
             {"name": "rect", "shape": {"T": 384, "D": 768, "F": 3072}, "seed": 3},
             {"name": "medium", "shape": {"T": 1024, "D": 1024, "F": 4096}, "seed": 4, "perf": True},
         ],
-        # Performance score: compiler estimate (us) on the perf case(s). Full marks
-        # at or below `full`, zero at or above `zero`, linear in between (log scale).
-        # Values are set from the instructor solutions (neuronx-cc 2.28).
-        "perf": {"full": 340.0, "zero": 4500.0},
+        # Performance score: compiler estimate (us) on the perf case(s). 1.0 at or below
+        # `full`, 0.0 at or above `zero`, interpolated linearly in log(time) between.
+        # Calibrated on the instructor solutions (neuronx-cc 2.28). `full` sits at the
+        # estimator's Tensor-Engine floor for this shape (~320 us in bf16), so it
+        # needs a matmul-bound kernel; partial designs land between 0.7 and 0.97.
+        "perf": {"full": 325.0, "zero": 4500.0},
+        # With --device (trn2.3xlarge, measured): instructor solutions 1962 / 265 / 270 us.
+        "perf_device": {"full": 270.0, "zero": 4000.0},
     },
     "P2": {
         "dir": "projects/P2_window_attention",
@@ -33,6 +37,8 @@ PROJECTS = {
             {"name": "long", "shape": {"T": 4096, "d": 128, "W": 512}, "seed": 4, "perf": True},
         ],
         "perf": {"full": 110.0, "zero": 1500.0},
+        # Device (trn2.3xlarge): instructor solutions 880 / 210 / 158 us.
+        "perf_device": {"full": 160.0, "zero": 1500.0},
     },
     "P3": {
         "dir": "projects/P3_mamba2_ssd",
@@ -45,5 +51,7 @@ PROJECTS = {
             {"name": "long", "shape": {"L": 4096, "P": 128, "N": 128}, "seed": 4, "perf": True},
         ],
         "perf": {"full": 80.0, "zero": 250.0},
+        # Device (trn2.3xlarge): instructor solutions 144 / 109 / 98 us.
+        "perf_device": {"full": 100.0, "zero": 300.0},
     },
 }

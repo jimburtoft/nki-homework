@@ -43,8 +43,8 @@ EXERCISES = [
         rmsnorm_ref,
         {"rel_l2": 1e-2},
     ),
-    Exercise("2c", "softmax", lambda: (f32((256, 512), 23),), softmax_ref, {"atol": 1e-6, "rtol": 1e-3}, note="normal range"),
-    Exercise("2c", "softmax", lambda: (f32((128, 512), 24, scale=100.0),), softmax_ref, {"atol": 1e-6, "rtol": 1e-3}, note="|x|~100"),
+    Exercise("2c", "softmax", lambda: (f32((256, 512), 23),), softmax_ref, {"atol": 1e-6, "rtol": 1e-3}, note="case 1: normal range"),
+    Exercise("2c", "softmax", lambda: (f32((128, 512), 24, scale=100.0),), softmax_ref, {"atol": 1e-6, "rtol": 1e-3}, note="case 2: |x|~100"),
 ]
 
 if __name__ == "__main__":

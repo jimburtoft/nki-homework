@@ -42,3 +42,19 @@ def configure() -> None:
     import warnings
 
     warnings.filterwarnings("ignore", category=FutureWarning, module=r"nki\..*")
+    if has_device():
+        _preload_libnrt()
+
+
+def _preload_libnrt() -> None:
+    """On a Neuron instance, make libnrt loadable for nrtpy (the NKI device runtime)
+    without requiring LD_LIBRARY_PATH to be set before Python starts."""
+    import ctypes
+
+    for d in (os.environ.get("NEURON_RT_LIB_DIR"), "/opt/aws/neuron/lib"):
+        if d and os.path.isfile(os.path.join(d, "libnrt.so.1")):
+            try:
+                ctypes.CDLL(os.path.join(d, "libnrt.so.1"), mode=ctypes.RTLD_GLOBAL)
+            except OSError:
+                pass
+            return

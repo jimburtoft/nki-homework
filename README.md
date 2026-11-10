@@ -56,9 +56,9 @@ python common/selftest.py          # should end with: SELFTEST PASS
 The package named `nki` on plain PyPI is a placeholder. You must use the Neuron
 index as shown above.
 
-On a trn2 instance with the AWS Neuron Deep Learning AMI (SDK 2.33), activate a
-venv that already has `nki` and `neuronx-cc` instead, for example
-`source /opt/aws_neuronx_venv_torch_neuronx_2_14_0/bin/activate`.
+On a trn2 instance with the AWS Neuron Deep Learning AMI (SDK 2.33), use the
+preinstalled venv and add the device runtime bindings. See
+[docs/HARDWARE.md](docs/HARDWARE.md).
 
 ## Workflow
 
@@ -70,6 +70,15 @@ python labs/L0_first_kernel/check.py --no-compile   # skip the compiler (faster)
 python grader/grade.py P1                      # grade your project (public tests)
 python grader/grade.py P1 --device             # on trn2: also run and time on hardware
 ```
+
+API documentation is in the installed package's docstrings, which you can read
+offline:
+
+```bash
+python -c "import sys; sys.path.insert(0, 'common'); import nkihw, nki.isa as nisa; help(nisa.nc_matmul)"
+```
+
+The full reference is the AWS Neuron documentation ("NKI API reference").
 
 Starter kernels allocate their output and return it **unwritten**. The
 simulator fills unwritten memory with NaN, so every check fails until you write

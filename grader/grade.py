@@ -13,8 +13,9 @@ Scoring (each case is run in a fresh subprocess with a time limit):
   legality     compiles for trn2 with neuronx-cc (the compiler checks on-chip
                memory capacity and hardware rules the simulator does not)
   performance  compiler-estimated latency on the perf case(s) (or measured
-               device latency with --device), mapped to [0, 1] between the
-               project's "full" and "zero" thresholds on a log scale
+               device latency with --device, which has its own thresholds),
+               mapped to [0, 1]: 1 at or below "full", 0 at or above "zero",
+               linear in log(time) in between
 """
 import argparse
 import importlib.util
@@ -116,11 +117,12 @@ def main():
         return 0
 
     cases = [] if a.only_extra else list(cfg["cases"])
-    perf_cfg = dict(cfg["perf"])
+    pkey = "perf_device" if a.device else "perf"
+    perf_cfg = dict(cfg[pkey])
     if a.cases:
         extra = json.load(open(a.cases))
         cases += extra.get("cases", [])
-        perf_cfg.update(extra.get("perf", {}))
+        perf_cfg.update(extra.get(pkey, {}))
 
     print(f"== {a.project}: {cfg['title']}\n   file: {kfile}")
     results = []

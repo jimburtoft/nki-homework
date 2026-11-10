@@ -37,8 +37,16 @@ Broadcasting a row vector to all 128 partitions:
     by reading it with partition stride 0:
         w_tile = nl.ndarray((P, D), dtype=w.dtype, buffer=nl.sbuf)
         nisa.dma_copy(dst=w_tile, src=w.ap(pattern=[[0, P], [1, D]]))
-    `.ap(pattern=[[stride, count], ...])` is an explicit access pattern:
-    partition stride 0 (repeat the same row P times), then D contiguous elements.
+    `.ap(pattern=[[stride, count], ...])` is an explicit access pattern over the
+    tensor's elements: the FIRST pair is the partition dimension, the rest are
+    free dimensions, and strides are in ELEMENTS. Above: partition stride 0
+    (repeat the same row P times), then D contiguous elements.
+    A second common pattern: spread a row vector b of shape [1, F] over
+    partitions as columns, so that tile[p, j] = b[0, j*P + p] (one value per
+    partition for each 128-chunk j):
+        b_tile = nl.ndarray((P, F // P), dtype=b.dtype, buffer=nl.sbuf)
+        nisa.dma_copy(dst=b_tile, src=b.ap(pattern=[[1, P], [P, F // P]]))
+    Then b_tile[:, j:j+1] is a [P, 1] per-partition operand.
 
 Rules of thumb for engine choice (trn2):
     Scalar (ACT)  transcendental functions (exp, gelu, rsqrt, ...) and fused scale+bias

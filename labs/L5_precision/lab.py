@@ -103,7 +103,7 @@ def matmul_long_k(at, b):
 #   Return A @ B as float32, computed with ONE nc_matmul in fp8 double_row mode.
 #
 #   check.py compares against the product of the fp8-ROUNDED inputs, so a
-#   correct kernel matches it to ~1e-6. It also prints how far that is from the
+#   correct kernel matches it closely (exactly in the simulator, ~1e-4 on trn2). It also prints how far that is from the
 #   exact bf16 product: that is the accuracy cost of fp8.
 #
 #   Steps:

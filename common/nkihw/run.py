@@ -67,8 +67,11 @@ class CompileReport:
         if self.mac_count:
             parts.append(f"{self.mac_count / 1e6:.1f} M MACs")
         parts.append(f"{self.total_instructions} instructions")
-        top_ops = sorted(self.instructions.items(), key=lambda kv: -kv[1])[:top]
-        return ", ".join(parts) + "\n  top opcodes: " + ", ".join(f"{k}={v}" for k, v in top_ops)
+        named = {k: v for k, v in self.instructions.items() if not k.startswith("UNKNOWN")}
+        other = sum(v for k, v in self.instructions.items() if k.startswith("UNKNOWN"))
+        top_ops = sorted(named.items(), key=lambda kv: -kv[1])[:top]
+        ops = ", ".join(f"{k}={v}" for k, v in top_ops) + (f", (unnamed)={other}" if other else "")
+        return ", ".join(parts) + "\n  top opcodes: " + ops
 
 
 _HINTS = [

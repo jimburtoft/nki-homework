@@ -65,7 +65,9 @@ def mean_near(out, ref):
 EXERCISES = [
     Exercise("5a", "matmul_long_k", long_k(512, 50), mm_t, {"rel_l2": 1e-5}, note="K=512"),
     Exercise("5a", "matmul_long_k", long_k(8192, 51), mm_t, {"rel_l2": 1e-5}, note="K=8192"),
-    Exercise("5b", "matmul_fp8_double_row", lambda: (rng(52).standard_normal((256, 128)).astype(BF16), rng(54).standard_normal((256, 512)).astype(BF16)), fp8_ref, {"rel_l2": 1e-5}),
+    # 1e-3, not tighter: trn2 hardware differs from the simulator by ~1e-4 here (fp8 product
+    # accumulation order). A wrong layout gives ~1.0; plain fp8 vs bf16 is ~4e-2.
+    Exercise("5b", "matmul_fp8_double_row", lambda: (rng(52).standard_normal((256, 128)).astype(BF16), rng(54).standard_normal((256, 512)).astype(BF16)), fp8_ref, {"rel_l2": 1e-3}),
     Exercise(
         "5c",
         "four_small_matmuls",
